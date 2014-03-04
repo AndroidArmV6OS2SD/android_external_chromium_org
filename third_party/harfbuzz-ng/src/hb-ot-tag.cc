@@ -84,15 +84,27 @@ static hb_tag_t
 hb_ot_new_tag_from_script (hb_script_t script)
 {
   switch ((hb_tag_t) script) {
-    case HB_SCRIPT_BENGALI:		return HB_TAG('b','n','g','2');
-    case HB_SCRIPT_DEVANAGARI:		return HB_TAG('d','e','v','2');
-    case HB_SCRIPT_GUJARATI:		return HB_TAG('g','j','r','2');
-    case HB_SCRIPT_GURMUKHI:		return HB_TAG('g','u','r','2');
-    case HB_SCRIPT_KANNADA:		return HB_TAG('k','n','d','2');
-    case HB_SCRIPT_MALAYALAM:		return HB_TAG('m','l','m','2');
-    case HB_SCRIPT_ORIYA:		return HB_TAG('o','r','y','2');
-    case HB_SCRIPT_TAMIL:		return HB_TAG('t','m','l','2');
-    case HB_SCRIPT_TELUGU:		return HB_TAG('t','e','l','2');
+#ifdef REVERIE
+    case HB_SCRIPT_BENGALI:             return HB_TAG('x','n','g','2');
+    case HB_SCRIPT_DEVANAGARI:          return HB_TAG('x','e','v','2');
+    case HB_SCRIPT_GUJARATI:            return HB_TAG('x','j','r','2');
+    case HB_SCRIPT_GURMUKHI:            return HB_TAG('x','u','r','2');
+    case HB_SCRIPT_KANNADA:             return HB_TAG('x','n','d','2');
+    case HB_SCRIPT_MALAYALAM:           return HB_TAG('x','l','m','2');
+    case HB_SCRIPT_ORIYA:               return HB_TAG('x','r','y','2');
+    case HB_SCRIPT_TAMIL:               return HB_TAG('x','m','l','2');
+    case HB_SCRIPT_TELUGU:              return HB_TAG('x','e','l','2');
+#else
+    case HB_SCRIPT_BENGALI:             return HB_TAG('b','n','g','2');
+    case HB_SCRIPT_DEVANAGARI:          return HB_TAG('d','e','v','2');
+    case HB_SCRIPT_GUJARATI:            return HB_TAG('g','j','r','2');
+    case HB_SCRIPT_GURMUKHI:            return HB_TAG('g','u','r','2');
+    case HB_SCRIPT_KANNADA:             return HB_TAG('k','n','d','2');
+    case HB_SCRIPT_MALAYALAM:           return HB_TAG('m','l','m','2');
+    case HB_SCRIPT_ORIYA:               return HB_TAG('o','r','y','2');
+    case HB_SCRIPT_TAMIL:               return HB_TAG('t','m','l','2');
+    case HB_SCRIPT_TELUGU:              return HB_TAG('t','e','l','2');
+#endif
     case HB_SCRIPT_MYANMAR:		return HB_TAG('m','y','m','2');
   }
 
@@ -103,15 +115,27 @@ static hb_script_t
 hb_ot_new_tag_to_script (hb_tag_t tag)
 {
   switch (tag) {
-    case HB_TAG('b','n','g','2'):	return HB_SCRIPT_BENGALI;
-    case HB_TAG('d','e','v','2'):	return HB_SCRIPT_DEVANAGARI;
-    case HB_TAG('g','j','r','2'):	return HB_SCRIPT_GUJARATI;
-    case HB_TAG('g','u','r','2'):	return HB_SCRIPT_GURMUKHI;
-    case HB_TAG('k','n','d','2'):	return HB_SCRIPT_KANNADA;
-    case HB_TAG('m','l','m','2'):	return HB_SCRIPT_MALAYALAM;
-    case HB_TAG('o','r','y','2'):	return HB_SCRIPT_ORIYA;
-    case HB_TAG('t','m','l','2'):	return HB_SCRIPT_TAMIL;
-    case HB_TAG('t','e','l','2'):	return HB_SCRIPT_TELUGU;
+#ifdef REVERIE
+    case HB_TAG('x','n','g','2'):       return HB_SCRIPT_BENGALI;
+    case HB_TAG('x','e','v','2'):       return HB_SCRIPT_DEVANAGARI;
+    case HB_TAG('x','j','r','2'):       return HB_SCRIPT_GUJARATI;
+    case HB_TAG('x','u','r','2'):       return HB_SCRIPT_GURMUKHI;
+    case HB_TAG('x','n','d','2'):       return HB_SCRIPT_KANNADA;
+    case HB_TAG('x','l','m','2'):       return HB_SCRIPT_MALAYALAM;
+    case HB_TAG('x','r','y','2'):       return HB_SCRIPT_ORIYA;
+    case HB_TAG('x','m','l','2'):       return HB_SCRIPT_TAMIL;
+    case HB_TAG('x','e','l','2'):       return HB_SCRIPT_TELUGU;
+#else
+    case HB_TAG('b','n','g','2'):       return HB_SCRIPT_BENGALI;
+    case HB_TAG('d','e','v','2'):       return HB_SCRIPT_DEVANAGARI;
+    case HB_TAG('g','j','r','2'):       return HB_SCRIPT_GUJARATI;
+    case HB_TAG('g','u','r','2'):       return HB_SCRIPT_GURMUKHI;
+    case HB_TAG('k','n','d','2'):       return HB_SCRIPT_KANNADA;
+    case HB_TAG('m','l','m','2'):       return HB_SCRIPT_MALAYALAM;
+    case HB_TAG('o','r','y','2'):       return HB_SCRIPT_ORIYA;
+    case HB_TAG('t','m','l','2'):       return HB_SCRIPT_TAMIL;
+    case HB_TAG('t','e','l','2'):       return HB_SCRIPT_TELUGU;
+#endif
     case HB_TAG('m','y','m','2'):	return HB_SCRIPT_MYANMAR;
   }
 

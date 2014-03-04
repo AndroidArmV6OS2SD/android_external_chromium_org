@@ -79,7 +79,11 @@ _hb_glyph_info_get_modified_combining_class (const hb_glyph_info_t *info)
 inline hb_bool_t
 _hb_glyph_info_is_default_ignorable (const hb_glyph_info_t *info)
 {
-  return !!(info->unicode_props0() & 0x80);
+#ifdef REVERIE
+    return 0;
+#else
+    return !!(info->unicode_props0() & 0x80);
+#endif
 }
 
 inline hb_bool_t
