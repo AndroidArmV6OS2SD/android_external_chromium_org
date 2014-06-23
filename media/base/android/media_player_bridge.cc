@@ -401,9 +401,6 @@ void MediaPlayerBridge::StartInternal() {
   if (suspended_) {
     SeekInternal(suspend_time);
     suspended_ = false;
-    jobject j_context = base::android::GetApplicationContext();
-    DCHECK(j_context);
-    listener_.CreateMediaPlayerListener(j_context, j_media_player_bridge_.obj());
     if (!Java_MediaPlayerBridge_resume(env, j_media_player_bridge_.obj())) {
         Release();
         Prepare();
