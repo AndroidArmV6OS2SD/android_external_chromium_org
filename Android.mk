@@ -96,3 +96,15 @@ endif
 include $(addsuffix .$(HOST_OS)-$(TARGET_2ND_ARCH).mk,$(GYP_MAKEFILE_STEMS))
 
 endif  # End secondary architecture handling.
+
+include $(CLEAR_VARS)
+LOCAL_COPY_HEADERS_TO := chromium_org/include
+LOCAL_COPY_HEADERS := v8/include/v8-debug.h
+LOCAL_COPY_HEADERS += v8/include/v8-platform.h
+LOCAL_COPY_HEADERS += v8/include/v8-profiler.h
+LOCAL_COPY_HEADERS += v8/include/v8-testing.h
+LOCAL_COPY_HEADERS += v8/include/v8-util.h
+LOCAL_COPY_HEADERS += v8/include/v8.h
+LOCAL_COPY_HEADERS += v8/include/v8config.h
+LOCAL_COPY_HEADERS += v8/include/v8stdint.h
+include $(BUILD_COPY_HEADERS)
