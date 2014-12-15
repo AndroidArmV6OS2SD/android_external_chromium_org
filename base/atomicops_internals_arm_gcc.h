@@ -65,6 +65,27 @@ inline void MemoryBarrier() {
     defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || \
     defined(__ARM_ARCH_6ZK__) || defined(__ARM_ARCH_6T2__)
 
+#if defined(__thumb__) && !defined(__thumb2__)
+#  define  __ATOMICS_SWITCH_TO_ARM \
+            "adr r3, 5f\n" \
+            "bx  r3\n" \
+            ".align\n" \
+            ".arm\n" \
+        "5:\n"
+/* note: the leading \n below is intentional */
+#  define __ATOMICS_SWITCH_TO_THUMB \
+            "\n" \
+            "adr r3, 6f+1\n" \
+            "bx  r3\n" \
+            ".thumb\n" \
+        "6:\n"
+#  define __ATOMICS_CLOBBERS   "r3",  /* list of clobbered registers */
+#else
+#  define  __ATOMICS_SWITCH_TO_ARM   /* nothing */
+#  define  __ATOMICS_SWITCH_TO_THUMB /* nothing */
+#  define  __ATOMICS_CLOBBERS        /* nothing */
+#endif
+
 inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
                                          Atomic32 old_value,
                                          Atomic32 new_value) {
@@ -77,16 +98,18 @@ inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
     //   reloop = 0
     //   if (prev_value != old_value)
     //      reloop = STREX(ptr, new_value)
-    __asm__ __volatile__("    ldrex %0, [%3]\n"
+    __asm__ __volatile__(__ATOMICS_SWITCH_TO_ARM
+                         "    ldrex %0, [%3]\n"
                          "    mov %1, #0\n"
                          "    cmp %0, %4\n"
 #ifdef __thumb2__
                          "    it eq\n"
 #endif
                          "    strexeq %1, %5, [%3]\n"
+                         __ATOMICS_SWITCH_TO_THUMB
                          : "=&r"(prev_value), "=&r"(reloop), "+m"(*ptr)
                          : "r"(ptr), "r"(old_value), "r"(new_value)
-                         : "cc", "memory");
+                         : __ATOMICS_CLOBBERS "cc", "memory");
   } while (reloop != 0);
   return prev_value;
 }
@@ -117,12 +140,14 @@ inline Atomic32 NoBarrier_AtomicIncrement(volatile Atomic32* ptr,
     //  value += increment
     //  reloop = STREX(ptr, value)
     //
-    __asm__ __volatile__("    ldrex %0, [%3]\n"
+    __asm__ __volatile__(__ATOMICS_SWITCH_TO_ARM
+                         "    ldrex %0, [%3]\n"
                          "    add %0, %0, %4\n"
                          "    strex %1, %0, [%3]\n"
+                         __ATOMICS_SWITCH_TO_THUMB
                          : "=&r"(value), "=&r"(reloop), "+m"(*ptr)
                          : "r"(ptr), "r"(increment)
-                         : "cc", "memory");
+                         : __ATOMICS_CLOBBERS "cc", "memory");
   } while (reloop);
   return value;
 }
@@ -145,11 +170,13 @@ inline Atomic32 NoBarrier_AtomicExchange(volatile Atomic32* ptr,
   do {
     // old_value = LDREX(ptr)
     // reloop = STREX(ptr, new_value)
-    __asm__ __volatile__("   ldrex %0, [%3]\n"
+    __asm__ __volatile__(__ATOMICS_SWITCH_TO_ARM
+                         "   ldrex %0, [%3]\n"
                          "   strex %1, %4, [%3]\n"
+                         __ATOMICS_SWITCH_TO_THUMB
                          : "=&r"(old_value), "=&r"(reloop), "+m"(*ptr)
                          : "r"(ptr), "r"(new_value)
-                         : "cc", "memory");
+                         : __ATOMICS_CLOBBERS "cc", "memory");
   } while (reloop != 0);
   return old_value;
 }
